@@ -3,39 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Парсер номеров из XLSX</title>
+    <title>Проверка номера</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>📊 Парсер номеров из XLSX</h1>
+        <h1>🔍 Проверка номера</h1>
         
-        <div class="upload-section">
-            <label for="fileInput" class="upload-label">
-                📁 Выберите XLSX файл
-            </label>
-            <input type="file" id="fileInput" accept=".xlsx, .xls" style="display: none;" onchange="handleFileUpload(this.files[0])">
-            
-            <div class="file-info" id="fileInfo">
-                Файл не выбран
+        <div class="input-group">
+            <!-- Выбор страны -->
+            <div class="select-group">
+                <label for="countrySelect">Страна:</label>
+                <select id="countrySelect" onchange="updateOperatorOptions()">
+                    <option value="+7">Россия (+7)</option>
+                    <!-- Можно добавить другие страны позже -->
+                </select>
             </div>
-        </div>
 
-        <div class="progress" id="progress" style="display: none;">
-            <div class="progress-bar" id="progressBar"></div>
-            <span id="progressText">0%</span>
-        </div>
-
-        <div class="results">
-            <h3>Результаты обработки:</h3>
-            <div class="stats" id="stats">
-                Обработано: 0 записей
-            </div>
-            
-            <div class="filters">
-                <input type="text" id="searchInput" placeholder="🔍 Поиск по номеру, ФИО или email..." oninput="filterResults()">
-                <select id="operatorFilter" onchange="filterResults()">
-                    <option value="">Все операторы</option>
+            <!-- Выбор оператора -->
+            <div class="select-group">
+                <label for="operatorSelect">Оператор:</label>
+                <select id="operatorSelect">
                     <option value="megafon">МегаФон</option>
                     <option value="mts">МТС</option>
                     <option value="beeline">Билайн</option>
@@ -44,33 +32,27 @@
                 </select>
             </div>
 
-            <div class="table-container">
-                <table id="resultsTable">
-                    <thead>
-                        <tr>
-                            <th>Номер</th>
-                            <th>ФИО</th>
-                            <th>Email</th>
-                            <th>Оператор</th>
-                            <th>Статус</th>
-                        </tr>
-                    </thead>
-                    <tbody id="resultsBody">
-                        <!-- Данные будут здесь -->
-                    </tbody>
-                </table>
+            <!-- Поле для ввода номера -->
+            <div class="input-field">
+                <label for="numberInput">Номер телефона:</label>
+                <input type="text" id="numberInput" placeholder="9001234567">
             </div>
+
+            <button onclick="validateNumber()">Проверить</button>
         </div>
 
-        <div class="controls">
-            <button onclick="downloadCSV()" id="downloadBtn" disabled>📥 Скачать CSV</button>
-            <button onclick="clearResults()">🧹 Очистить результаты</button>
+        <div id="result"></div>
+
+        <div class="history-controls">
+            <button onclick="downloadCSV()">📥 Скачать историю (CSV)</button>
+            <button onclick="document.getElementById('fileInput').click()">📁 Загрузить историю</button>
+            <input type="file" id="fileInput" accept=".csv" style="display: none;" onchange="loadCSV(this.files[0])">
         </div>
+
+        <div id="historyTable"></div>
     </div>
 
-    <!-- Библиотеки -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="papaparse.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
